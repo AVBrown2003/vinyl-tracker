@@ -40,6 +40,9 @@ MANUAL = {
     "queen-greatest-hits": ("Bohemian Rhapsody", "fJ9rUzIMcZQ"),
     "the-beatles-rubber-soul": ("In My Life", "YBcdt6DsLQA"),
     "kanye-west-my-beautiful-dark-twisted-fantasy": ("Devil in a New Dress", "sk3rpYkiHe8"),
+    "tame-impala-currents": ("The Less I Know the Better", "2SUwOgmvzK4"),
+    # The Cure's label blocks its own Topic uploads from playing on other sites, so this is the official video
+    "the-cure-disintegration": ("Lovesong", "hXCKLJGLENs"),
 }
 UA = "VinylVault/1.0 (FDA class project)"
 PAUSE = 0.35

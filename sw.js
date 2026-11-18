@@ -1,6 +1,6 @@
 // Online: always try the network (so data is fresh) and keep a copy.
 // Offline: serve the last copy, marked with an x-from-cache header so the page can say so.
-const CACHE = "vinyl-tracker-v20";
+const CACHE = "vinyl-tracker-v21";
 const SHELL = [
   "./", "index.html", "browse.html", "trends.html", "manifest.webmanifest",
   "assets/style.css", "assets/common.js", "assets/today.js", "assets/browse.js",

@@ -9,7 +9,7 @@
     album: "the whole album",
     chosen: "a hand-picked song from the album",
   };
-  let songs = {}, order = [], current = null, player = null, apiPromise = null, volume = 70, shuffle = false;
+  let songs = {}, order = [], current = null, player = null, apiPromise = null, volume = 70, shuffle = false, skipOnError = 0;
 
   const $ = id => document.getElementById(id);
   const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -44,9 +44,12 @@
     document.querySelectorAll("[data-play]").forEach(b => b.classList.toggle("on", b.dataset.play === current));
   }
 
-  function play(id) {
+  // skipDir: 0 when you picked the album yourself (a video that fails just says so); 1 or -1 when the player
+  // moved on by itself or you pressed next or previous (a video that fails is skipped in that direction)
+  function play(id, skipDir = 0) {
     if (!songs[id]) return;
     current = id;
+    skipOnError = skipDir;
     save();
     openPanel(true);
     showNow();
@@ -65,7 +68,10 @@
             $("music-play").setAttribute("aria-label", e.data === 1 ? "Pause" : "Play");
             if (e.data === 0) step(1);                        // the song ended: on to the next album
           },
-          onError: () => { status("That video could not be played, skipping..."); setTimeout(() => step(1), 1200); },
+          onError: () => {
+            if (skipOnError) { status("That video could not be played, skipping..."); setTimeout(() => step(skipOnError), 1200); }
+            else status("YouTube will not play this one here. Use the YouTube link above to open it.");
+          },
         },
       });
     }).catch(err => status(err.message));
@@ -76,7 +82,7 @@
     let i;
     if (shuffle) i = Math.floor(Math.random() * order.length);
     else i = (Math.max(0, order.indexOf(current)) + dir + order.length) % order.length;
-    play(order[i]);
+    play(order[i], dir || 1);
   }
 
   function openPanel(open) {
