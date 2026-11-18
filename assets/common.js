@@ -118,7 +118,7 @@ function windowRows(rows, key) {
   return rows.filter(r => dayNum(r.date) >= cutoff);
 }
 
-// Top seller. Discogs does not publish sales, so the signal is how many collectors newly say they have a
+// Popularity gain: how many collectors newly say they have a
 // record: gain = collectors at the end of the window - collectors at the start (`have`, first and last day with a count).
 function collectorGains(rows) {
   const byItem = new Map();

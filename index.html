@@ -4,26 +4,26 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Today - The Vinyl Vault</title>
-<meta name="description" content="Daily prices and collector counts for top-selling vinyl records.">
+<meta name="description" content="A daily price and popularity tracker for well-known vinyl records.">
 <meta name="theme-color" content="#17161a">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="assets/icon-192.png">
 <link rel="apple-touch-icon" href="assets/icon-192.png">
-<link rel="stylesheet" href="assets/style.css?v=7">
-<script src="assets/common.js?v=7" defer></script>
-<script src="assets/today.js?v=7" defer></script>
+<link rel="stylesheet" href="assets/style.css?v=8">
+<script src="assets/common.js?v=8" defer></script>
+<script src="assets/today.js?v=8" defer></script>
 </head>
 <body>
 <header class="hero"><div class="wrap">
-  <div class="eyebrow">Top-selling vinyl records</div>
+  <div class="eyebrow">Vinyl prices and popularity</div>
   <h1>Today</h1>
   <p class="lede">Last run: <strong id="run-time">loading...</strong></p>
 </div></header>
 <main>
   <section class="about" aria-labelledby="about-h">
     <h2 id="about-h">What this site does</h2>
-    <p>The Vinyl Vault watches the market for <strong>top-selling vinyl records</strong>. Every morning, on its own, it looks up
-    <strong><span id="about-n">100</span> best-selling albums</strong> on Discogs, the largest database of records and the place where collectors buy and sell them, and adds the day's numbers to a growing history.</p>
+    <p>The Vinyl Vault is a <strong>price and popularity tracker for vinyl records</strong>. Every morning, on its own, it looks up
+    <strong><span id="about-n">100</span> well-known albums</strong> on Discogs, the largest database of records and the place where collectors buy and sell them, and adds the day's numbers to a growing history.</p>
     <p><strong>For every record, every day, it tracks:</strong></p>
     <ul>
       <li><strong>Lowest price</strong> - the cheapest copy currently for sale, in US dollars</li>
@@ -31,7 +31,7 @@
       <li><strong>Collectors who have it</strong> and <strong>collectors who want it</strong> - a sign of how popular and how scarce a record is</li>
       <li><strong>Rating</strong> - the average of collectors' star ratings, and how many votes it rests on</li>
     </ul>
-    <p>From that history it works out which prices <strong>moved the most</strong> since yesterday, and who the <strong>top seller</strong> is for the day, week, month, year and decade (the record that gained the most collectors; Discogs does not publish sales).
+    <p>From that history it works out which prices <strong>moved the most</strong> since yesterday, and which record is <strong>rising fastest in popularity</strong> for the day, week, month, year and decade (the record that gained the most collectors).
     Use <strong>Browse</strong> to filter, search, sort and star records, and <strong>Trends</strong> for charts and findings over time. The data updates by itself at about 3:00 AM Central.</p>
   </section>
 
@@ -52,11 +52,11 @@
   <p class="note" id="move-note"></p>
   <ul class="list" id="moves"></ul>
 
-  <h2>Top seller by period</h2>
-  <p class="note">Discogs does not publish sales, so the top seller is the record that gained the most collectors who say they have it over the period. A period fills in as the history grows.</p>
+  <h2>Rising in popularity</h2>
+  <p class="note">Popularity is counted in collectors: the riser is the record that gained the most collectors who say they have it over the period. A period fills in as the history grows.</p>
   <div class="tablewrap"><table>
-    <thead><tr><th>Period</th><th>Top seller</th><th class="num">New collectors</th><th>Dates compared</th></tr></thead>
-    <tbody id="sellers"></tbody>
+    <thead><tr><th>Period</th><th>Most popular riser</th><th class="num">New collectors</th><th>Dates compared</th></tr></thead>
+    <tbody id="risers"></tbody>
   </table></div>
 
   <h2>Latest values</h2>

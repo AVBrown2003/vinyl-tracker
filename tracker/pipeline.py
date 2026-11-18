@@ -82,8 +82,8 @@ def issue_body(rows: list[dict], date: str, status: dict) -> str:
         else:
             out.append("No record's lowest price moved.")
         gains = moves.collector_gains(rows, date)["gains"]
-        out += ["", f"## Top seller since {changes['previous']}",
-                "Discogs does not publish sales, so this is the record that gained the most collectors who have it."]
+        out += ["", f"## Biggest popularity gain since {changes['previous']}",
+                "Popularity is counted in collectors: the record that gained the most collectors who say they have it."]
         if gains and gains[0]["gain"] > 0:
             g = gains[0]
             out.append(f"**{g['item']}**: +{g['gain']:,} collectors ({g['old']:,} to {g['new']:,}).")

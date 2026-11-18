@@ -1,6 +1,6 @@
 """The vinyl records the tracker follows.
 
-Each item is one well-known top-selling album, pinned to one standard vinyl pressing
+Each item is one well-known, widely owned album, pinned to one standard vinyl pressing
 on Discogs (the release id). The item_id is the key that lines an item up from one day
 to the next; it never changes even if the album title is edited on Discogs.
 """

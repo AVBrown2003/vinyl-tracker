@@ -28,9 +28,9 @@ def previous_date(rows: list[dict], date: str) -> str | None:
 def collector_gains(rows: list[dict], date: str) -> dict:
     """The records that gained the most collectors (`have`) since the previous run.
 
-    Discogs does not publish sales. The closest signal it gives is how many collectors say they
-    own a record, so the "top seller" is the record whose `have` rose the most between the previous
-    run and this run: gain = have_now - have_before. Records without a count on both days do not count.
+    Popularity is counted in collectors: how many say they own a record (`have`). The record whose
+    `have` rose the most between the previous run and this run is rising fastest in popularity:
+    gain = have_now - have_before. Records without a count on both days do not count.
     """
     today = {r["item_id"]: r for r in rows if r["date"] == date}
     prev_day = previous_date(rows, date)

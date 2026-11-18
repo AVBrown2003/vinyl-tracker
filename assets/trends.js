@@ -85,18 +85,18 @@ function renderFindings(t, win) {
       hbars(t.daily.slice(0, 10).map(d => ({ label: `${d.item} (${d.date.slice(5)})`, value: d.pct })), v => fmtPct(v))));
   } else out.push(needTwo("The biggest one-day move"));
 
-  // top seller of the window
+  // popularity gain of the window
   if (t.gains.length) {
     const top = t.gains[0];
     const total = sum(t.gains.map(g => g.gain));
     out.push(section(
-      top.gain > 0 ? `${esc(top.item)} was the top seller ${w.phrase}, with ${top.gain.toLocaleString("en-US")} new collectors` : `No record gained collectors ${w.phrase}`,
-      `Discogs does not publish sales, so "top seller" here means the record that gained the most collectors who say they have it. From ${top.fromDate} to ${top.toDate}, ` +
+      top.gain > 0 ? `${esc(top.item)} gained the most popularity ${w.phrase}, with ${top.gain.toLocaleString("en-US")} new collectors` : `No record gained collectors ${w.phrase}`,
+      `Popularity here is counted in collectors: the record that gained the most collectors who say they have it is the one rising fastest. From ${top.fromDate} to ${top.toDate}, ` +
       `${esc(top.item)} went from ${top.from.toLocaleString("en-US")} to ${top.to.toLocaleString("en-US")} collectors. All ${t.gains.length} records together gained ${total.toLocaleString("en-US")}, ` +
       `an average of ${(total / t.gains.length).toFixed(1)} per record.`,
       "for each record, have on the last day in the window minus have on the first day in the window with a count in history.csv; the chart shows the ten largest gains." + inWindow,
       hbars(t.gains.slice(0, 10).map(g => ({ label: g.item, value: g.gain })), v => (v > 0 ? "+" : "") + v.toLocaleString("en-US"), "#6a4fb3")));
-  } else out.push(needTwo("The top seller"));
+  } else out.push(needTwo("The popularity gain"));
 
   // 3
   if (t.priced.length) {

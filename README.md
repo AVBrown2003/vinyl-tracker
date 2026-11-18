@@ -1,10 +1,10 @@
 # The Vinyl Vault
 
-*A daily watch on the prices of the best-selling records on vinyl.*
+*A daily tracker of vinyl prices and collector popularity.*
 
 [![tests](https://github.com/AVBrown2003/vinyl-tracker/actions/workflows/tests.yml/badge.svg)](https://github.com/AVBrown2003/vinyl-tracker/actions/workflows/tests.yml)
 
-A tool that tracks **100 top-selling vinyl records**. Every day GitHub Actions asks the public Discogs database for each record's lowest asking price, how many copies are for sale, and how many collectors have it or want it. It adds one row per record per day to a history, opens a GitHub Issue with the biggest price moves, and publishes the result to a website.
+A tool that tracks the **price and popularity of 100 well-known vinyl records**. Every day GitHub Actions asks the public Discogs database for each record's lowest asking price, how many copies are for sale, and how many collectors have it or want it. It adds one row per record per day to a history, opens a GitHub Issue with the biggest price moves, and publishes the result to a website.
 
 - Live site: https://avbrown2003.github.io/vinyl-tracker/
 - Daily issues: the repository's Issues tab (one per day, the previous day's is closed)
@@ -22,7 +22,7 @@ A second run on the same UTC day deletes that day's raw files, fetches again, re
 
 ## Items
 
-100 well-known top-selling vinyl albums, from classics (Pink Floyd, The Beatles, Fleetwood Mac, Led Zeppelin, Eagles, Nirvana) to the current best-sellers (Taylor Swift, Billie Eilish, Olivia Rodrigo, Kendrick Lamar, Sabrina Carpenter), each pinned to one vinyl pressing on Discogs (the full list is in `tracker/items.py`). The list is a hand-picked set of widely sold albums, not an official ranking. The **key** that lines a record up from one day to the next is `item_id`, a lowercase slug of artist and album such as `fleetwood-mac-rumours`. It never changes, even if the title is edited on Discogs.
+100 well-known vinyl albums, from classics (Pink Floyd, The Beatles, Fleetwood Mac, Led Zeppelin, Eagles, Nirvana) to current favorites (Taylor Swift, Billie Eilish, Olivia Rodrigo, Kendrick Lamar, Sabrina Carpenter), each pinned to one vinyl pressing on Discogs (the full list is in `tracker/items.py`). The list is a hand-picked set of widely owned albums; it is not a ranking of sales, because Discogs does not publish sales. The **key** that lines a record up from one day to the next is `item_id`, a lowercase slug of artist and album such as `fleetwood-mac-rumours`. It never changes, even if the title is edited on Discogs.
 
 ## Source
 
@@ -64,9 +64,9 @@ One row per record per day, sorted by `date`, then `item_id`. Dates are UTC date
 
 A **move** is the percent change of a record's lowest asking price (`lowest_price`) from the previous run to this run: `(new - old) / old * 100`. Only records with a price on both days count, and a record whose price did not change is not a move. Records are ranked by the size of the change, ignoring the sign, and the daily GitHub Issue lists the **5 biggest**, with the old and new price and the copies for sale. The "previous run" is the latest earlier date that has rows in the history, so a day when the source failed is skipped. A record in today's run but not the previous one is listed as **appeared**; the other way round, **disappeared**. A day when the source failed reports no appeared or disappeared records. The rule lives in `tracker/moves.py` and is repeated in `assets/common.js` so the Today page shows the same list.
 
-## Top seller
+## Popularity gain
 
-Discogs does not publish sales, so the **top seller** of a period is the record that gained the most collectors who say they have it: `have` on the last day of the period minus `have` on the first day of the period that has a count. The Today page shows it for Daily (latest run against the previous run), Weekly (last 7 days), Monthly (last 30 days), Yearly (last 365 days) and Decade (last 10 years), counted back from the latest date; a period shows "not enough history yet" until it has two runs. The Trends page shows it as a finding for the chosen window, and each day's GitHub Issue names the top seller since the previous run. Because the history only starts when the tool starts, the longer periods equal the history so far until it grows.
+Popularity is counted in collectors. The **popularity gain** of a period is how many more collectors say they have a record at the end of the period than at the start, and the record with the biggest gain is the one **rising fastest in popularity**: `have` on the last day of the period minus `have` on the first day of the period that has a count. The Today page shows it for Daily (latest run against the previous run), Weekly (last 7 days), Monthly (last 30 days), Yearly (last 365 days) and Decade (last 10 years), counted back from the latest date; a period shows "not enough history yet" until it has two runs. The Trends page shows it as a finding for the chosen window, and each day's GitHub Issue names the biggest popularity gain since the previous run. Because the history only starts when the tool starts, the longer periods equal the history so far until it grows.
 
 ## Build the history from the raw files
 
@@ -80,9 +80,9 @@ uv run python -m tracker.build
 
 Three pages that load `data/status.json` and `data/history.csv` in the browser and compute everything there:
 
-- **Today** (`index.html`): time of the last run, status of the source, the counts, the latest values of every record with its price change since the previous run, and the five biggest moves, and the **top seller** of each period (see below).
+- **Today** (`index.html`): time of the last run, status of the source, the counts, the latest values of every record with its price change since the previous run, and the five biggest moves, and the record **rising fastest in popularity** for each period (see below).
 - **Browse** (`browse.html`): the latest values of every record, filters (artist, genre, decade, highest price), a search box for names, sorting by every numeric column up and down (click a heading), and a star on every record that saves it to a shortlist kept in the browser.
-- **Trends** (`trends.html`): a time control and a chart of any value over the days with a control to pick records, and seven sections whose headings state a finding (price change since the first run, the biggest one-day move, the top seller, the price spread, collector demand, scarcity, ratings). Each gives the numbers and how they are computed from the history file, with a chart. All numbers are computed in the browser from `history.csv`. The **window** buttons (Daily = the latest run against the previous run, Weekly = the last 7 days, Monthly = the last 30 days, Yearly = the last 365 days, Decade = the last 10 years, All time) decide which dates every finding and the chart use, counted back from the latest date in the history; the findings about the latest day (price spread, demand, scarcity, ratings) always use the latest day. **Group the chart by** day, month, year or decade draws one point per period, each the average of the days in it.
+- **Trends** (`trends.html`): a time control and a chart of any value over the days with a control to pick records, and seven sections whose headings state a finding (price change since the first run, the biggest one-day move, the popularity gain, the price spread, collector demand, scarcity, ratings). Each gives the numbers and how they are computed from the history file, with a chart. All numbers are computed in the browser from `history.csv`. The **window** buttons (Daily = the latest run against the previous run, Weekly = the last 7 days, Monthly = the last 30 days, Yearly = the last 365 days, Decade = the last 10 years, All time) decide which dates every finding and the chart use, counted back from the latest date in the history; the findings about the latest day (price spread, demand, scarcity, ratings) always use the latest day. **Group the chart by** day, month, year or decade draws one point per period, each the average of the days in it.
 
 The site is installable (`manifest.webmanifest`, `sw.js`). Online it loads fresh data; offline it opens and shows the last data it loaded.
 

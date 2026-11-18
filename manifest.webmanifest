@@ -1,7 +1,7 @@
 {
   "name": "The Vinyl Vault",
   "short_name": "Vault",
-  "description": "Daily prices and collector counts for top-selling vinyl records.",
+  "description": "A daily price and popularity tracker for well-known vinyl records.",
   "start_url": "index.html",
   "scope": "./",
   "display": "standalone",

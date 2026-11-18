@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       `<span class="${m.pct > 0 ? "up" : "down"}">${fmtPct(m.pct)}</span></li>`).join("")
       : `<li class="empty">${diff.previous ? "No record's lowest price moved." : "Nothing to show yet."}</li>`;
 
-    el("sellers").innerHTML = ["daily", "week", "month", "year", "decade"].map(k => {
+    el("risers").innerHTML = ["daily", "week", "month", "year", "decade"].map(k => {
       const g = collectorGains(windowRows(rows, k));
       const label = `<td><strong>${WINDOWS[k].label}</strong><div class="sub">${WINDOWS[k].text}</div></td>`;
       if (!g.length) return `<tr>${label}<td class="sub" colspan="3">Not enough history yet (needs two runs in the period).</td></tr>`;

@@ -42,8 +42,8 @@ def test_issue_lists_biggest_moves_with_old_and_new_values(repo):
     body = pipeline.issue_body(rows, "2026-03-02", st)
     assert "Biggest price moves since 2026-03-01" in body
     assert f"| {ITEMS[0].name} | $10.00 | $15.00 | +50.0% |" in body
-    assert "## Top seller since 2026-03-01" in body and "collectors" in body
-    assert ITEMS[1].name not in body.split("## Appeared")[0].split("## Top seller")[0]    # did not move
+    assert "## Biggest popularity gain since 2026-03-01" in body and "collectors" in body
+    assert ITEMS[1].name not in body.split("## Appeared")[0].split("## Biggest popularity gain")[0]    # did not move
     assert f"- {ITEMS[2].name}" in body.split("## Appeared")[1]
 
 

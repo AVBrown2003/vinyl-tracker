@@ -1,7 +1,7 @@
 [project]
 name = "vinyl-tracker"
 version = "0.1.0"
-description = "Daily tracker of prices and collector counts for top-selling vinyl records"
+description = "Daily price and popularity tracker for well-known vinyl records"
 requires-python = ">=3.11"
 dependencies = []
 
