@@ -17,13 +17,14 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (!all.length) { el("moves").innerHTML = '<li class="empty">No data yet.</li>'; return; }
     const latest = all[all.length - 1];
     const diff = compareDays(rows, latest);
+    const byId = new Map(rows.filter(r => r.date === latest).map(r => [r.item_id, r]));
 
     el("move-note").textContent = diff.previous
       ? `Compared with ${diff.previous}. A move is the percent change in the lowest asking price; the five biggest are listed, up or down.`
       : "This is the first run with data, so there is nothing to compare yet.";
     el("moves").innerHTML = diff.moves.length ? diff.moves.map(m =>
-      `<li><div class="grow"><strong>${esc(m.item)}</strong><div class="sub">${fmtVal("lowest_price", m.old)} to ${fmtVal("lowest_price", m.now)} · ` +
-      `copies for sale ${m.oldSale ?? "-"} to ${m.newSale ?? "-"}</div></div>` +
+      `<li><div class="itemcell grow">${sleeve(byId.get(m.id))}<div class="grow"><strong>${L(m.item)}</strong><div class="sub">${fmtVal("lowest_price", m.old)} to ${fmtVal("lowest_price", m.now)} · ` +
+      `copies for sale ${m.oldSale ?? "-"} to ${m.newSale ?? "-"}</div></div></div>` +
       `<span class="${m.pct > 0 ? "up" : "down"}">${fmtPct(m.pct)}</span></li>`).join("")
       : `<li class="empty">${diff.previous ? "No record's lowest price moved." : "Nothing to show yet."}</li>`;
 
@@ -32,7 +33,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       const label = `<td><strong>${WINDOWS[k].label}</strong><div class="sub">${WINDOWS[k].text}</div></td>`;
       if (!g.length) return `<tr>${label}<td class="sub" colspan="3">Not enough history yet (needs two runs in the period).</td></tr>`;
       const top = g[0];
-      return `<tr>${label}<td class="name"><div class="itemcell">${top.gain > 0 ? "" : ""}<strong>${esc(top.item)}</strong></div></td>` +
+      return `<tr>${label}<td class="name"><div class="itemcell">${sleeve(byId.get(top.id))}<strong>${L(top.item)}</strong></div></td>` +
         `<td class="num up">${top.gain > 0 ? "+" : ""}${top.gain.toLocaleString("en-US")}</td><td class="sub">${top.fromDate} to ${top.toDate}</td></tr>`;
     }).join("");
 

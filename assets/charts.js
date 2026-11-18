@@ -43,7 +43,9 @@ function hbars(items, fmt, color = "#d8412a") {
   let g = `<line x1="${x(0)}" x2="${x(0)}" y1="${T}" y2="${H - 6}" stroke="#bdb49f"/>`;
   items.forEach((it, i) => {
     const yy = T + i * row, x0 = x(0), x1 = x(it.value), left = it.value < 0;
-    g += `<text x="${LAB - 10}" y="${yy + 17}" text-anchor="end">${esc(cut(it.label, 40))}</text>` +
+    const url = typeof ITEM_URL !== "undefined" && (ITEM_URL.get(it.label) || ITEM_URL.get(it.label.replace(/ \(\d\d-\d\d\)$/, "")));
+    const label = `<text x="${LAB - 10}" y="${yy + 17}" text-anchor="end">${esc(cut(it.label, 40))}</text>`;
+    g += (url ? `<a href="${esc(url)}" target="_blank" rel="noopener" class="barlink"><title>${esc(it.label)} on Discogs</title>${label}</a>` : label) +
       `<rect x="${Math.min(x0, x1).toFixed(1)}" y="${yy + 4}" width="${Math.max(1, Math.abs(x1 - x0)).toFixed(1)}" height="${row - 9}" rx="2" fill="${it.color || (left ? "#c0392b" : color)}"/>` +
       `<text x="${(left ? Math.min(x0, x1) - 6 : Math.max(x0, x1) + 6).toFixed(1)}" y="${yy + 17}" text-anchor="${left ? "end" : "start"}">${esc(fmt(it.value))}</text>`;
   });

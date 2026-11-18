@@ -64,9 +64,9 @@ function renderFindings(t, win) {
     const up = t.sinceFirst[0], down = t.sinceFirst[t.sinceFirst.length - 1];
     const avg = sum(t.sinceFirst.map(s => s.pct)) / t.sinceFirst.length;
     out.push(section(
-      up.pct > 0 ? `${esc(up.item)} rose the most in price ${w.phrase} (${fmtPct(up.pct)})` : `No record has risen in price ${w.phrase}`,
-      `From ${up.fromDate} to ${up.toDate} the lowest asking price of ${esc(up.item)} went from ${usd(up.from)} to ${usd(up.to)} (${fmtPct(up.pct)}). ` +
-      `The record that fell the most was ${esc(down.item)}, from ${usd(down.from)} to ${usd(down.to)} (${fmtPct(down.pct)}). ` +
+      up.pct > 0 ? `${L(up.item)} rose the most in price ${w.phrase} (${fmtPct(up.pct)})` : `No record has risen in price ${w.phrase}`,
+      `From ${up.fromDate} to ${up.toDate} the lowest asking price of ${L(up.item)} went from ${usd(up.from)} to ${usd(up.to)} (${fmtPct(up.pct)}). ` +
+      `The record that fell the most was ${L(down.item)}, from ${usd(down.from)} to ${usd(down.to)} (${fmtPct(down.pct)}). ` +
       `Across the ${t.sinceFirst.length} records with at least two priced days the average change is ${fmtPct(avg)}.`,
       "for each record, (latest price − first price) ÷ first price × 100, using the first and the latest day on which it had a lowest price in history.csv." + inWindow,
       hbars(t.sinceFirst.map(s => ({ label: s.item, value: s.pct })), v => fmtPct(v))));
@@ -77,7 +77,7 @@ function renderFindings(t, win) {
     const top = t.daily[0];
     const flat = t.daily.filter(d => d.pct === 0).length;
     out.push(section(
-      `The biggest one-day price move was ${esc(top.item)} on ${top.date} (${fmtPct(top.pct)})`,
+      `The biggest one-day price move was ${L(top.item)} on ${top.date} (${fmtPct(top.pct)})`,
       `Its lowest asking price went from ${usd(top.from)} to ${usd(top.to)} in one day. Across all ${t.daily.length} price changes between consecutive days, ` +
       `the average size of a move (ignoring up or down) is ${(sum(t.daily.map(d => Math.abs(d.pct))) / t.daily.length).toFixed(1)}%, and ` +
       `${flat} ${flat === 1 ? "was" : "were"} no change at all.`,
@@ -90,9 +90,9 @@ function renderFindings(t, win) {
     const top = t.gains[0];
     const total = sum(t.gains.map(g => g.gain));
     out.push(section(
-      top.gain > 0 ? `${esc(top.item)} gained the most popularity ${w.phrase}, with ${top.gain.toLocaleString("en-US")} new collectors` : `No record gained collectors ${w.phrase}`,
+      top.gain > 0 ? `${L(top.item)} gained the most popularity ${w.phrase}, with ${top.gain.toLocaleString("en-US")} new collectors` : `No record gained collectors ${w.phrase}`,
       `Popularity here is counted in collectors: the record that gained the most collectors who say they have it is the one rising fastest. From ${top.fromDate} to ${top.toDate}, ` +
-      `${esc(top.item)} went from ${top.from.toLocaleString("en-US")} to ${top.to.toLocaleString("en-US")} collectors. All ${t.gains.length} records together gained ${total.toLocaleString("en-US")}, ` +
+      `${L(top.item)} went from ${top.from.toLocaleString("en-US")} to ${top.to.toLocaleString("en-US")} collectors. All ${t.gains.length} records together gained ${total.toLocaleString("en-US")}, ` +
       `an average of ${(total / t.gains.length).toFixed(1)} per record.`,
       "for each record, have on the last day in the window minus have on the first day in the window with a count in history.csv; the chart shows the ten largest gains." + inWindow,
       hbars(t.gains.slice(0, 10).map(g => ({ label: g.item, value: g.gain })), v => (v > 0 ? "+" : "") + v.toLocaleString("en-US"), "#6a4fb3")));
@@ -104,7 +104,7 @@ function renderFindings(t, win) {
     const prices = t.priced.map(r => r.lowest_price);
     out.push(section(
       `Prices run from ${usd(lo.lowest_price)} to ${usd(hi.lowest_price)}, so the dearest record costs ${(hi.lowest_price / lo.lowest_price).toFixed(1)} times the cheapest`,
-      `On ${t.last} the cheapest copy for sale is ${esc(lo.item)} at ${usd(lo.lowest_price)} and the most expensive is ${esc(hi.item)} at ${usd(hi.lowest_price)}. ` +
+      `On ${t.last} the cheapest copy for sale is ${L(lo.item)} at ${usd(lo.lowest_price)} and the most expensive is ${L(hi.item)} at ${usd(hi.lowest_price)}. ` +
       `The middle price (median) is ${usd(median(prices))} and the average is ${usd(sum(prices) / prices.length)} across ${prices.length} records.`,
       "the lowest_price of every record on the latest day in history.csv, then the minimum, maximum, median and mean of those prices; the ratio is maximum ÷ minimum." + latestNote,
       hbars(t.priced.map(r => ({ label: r.item, value: r.lowest_price })), usd, "#1d7a85")));
@@ -114,8 +114,8 @@ function renderFindings(t, win) {
   if (t.demand.length) {
     const a = t.demand[0], z = t.demand[t.demand.length - 1];
     out.push(section(
-      `${esc(a.item)} has the most collectors waiting: ${a.ratio.toFixed(0)} want it for every 100 who have it`,
-      `${a.want.toLocaleString("en-US")} collectors want ${esc(a.item)} and ${a.have.toLocaleString("en-US")} have it. The lowest demand is for ${esc(z.item)}, ` +
+      `${L(a.item)} has the most collectors waiting: ${a.ratio.toFixed(0)} want it for every 100 who have it`,
+      `${a.want.toLocaleString("en-US")} collectors want ${L(a.item)} and ${a.have.toLocaleString("en-US")} have it. The lowest demand is for ${L(z.item)}, ` +
       `at ${z.ratio.toFixed(0)} wants per 100 owners. The typical record (median) has ${median(t.demand.map(d => d.ratio)).toFixed(0)} wants per 100 owners.`,
       "on the latest day, want ÷ have × 100 for every record (collectors who want it per 100 collectors who own it); the chart shows the ten highest." + latestNote,
       hbars(t.demand.slice(0, 10).map(d => ({ label: d.item, value: d.ratio })), v => v.toFixed(0))));
@@ -125,7 +125,7 @@ function renderFindings(t, win) {
   if (t.stock.length) {
     const few = t.stock[0], many = t.stock[t.stock.length - 1];
     out.push(section(
-      `Only ${few.num_for_sale} ${few.num_for_sale === 1 ? "copy" : "copies"} of ${esc(few.item)} ${few.num_for_sale === 1 ? "is" : "are"} for sale, against ${many.num_for_sale} of ${esc(many.item)}`,
+      `Only ${few.num_for_sale} ${few.num_for_sale === 1 ? "copy" : "copies"} of ${L(few.item)} ${few.num_for_sale === 1 ? "is" : "are"} for sale, against ${many.num_for_sale} of ${L(many.item)}`,
       `Across the ${t.stock.length} records there are ${sum(t.stock.map(r => r.num_for_sale)).toLocaleString("en-US")} copies for sale in total, an average of ` +
       `${(sum(t.stock.map(r => r.num_for_sale)) / t.stock.length).toFixed(0)} per record (median ${median(t.stock.map(r => r.num_for_sale)).toFixed(0)}).`,
       "num_for_sale of every record on the latest day in history.csv; the chart shows the ten scarcest." + latestNote,
@@ -136,8 +136,8 @@ function renderFindings(t, win) {
   if (t.rated.length) {
     const best = t.rated[0], worst = t.rated[t.rated.length - 1];
     out.push(section(
-      `${esc(best.item)} is the highest rated at ${best.rating.toFixed(2)} stars`,
-      `It has ${best.rating_votes.toLocaleString("en-US")} rating votes. The lowest rated is ${esc(worst.item)} at ${worst.rating.toFixed(2)} stars, so the whole range is only ` +
+      `${L(best.item)} is the highest rated at ${best.rating.toFixed(2)} stars`,
+      `It has ${best.rating_votes.toLocaleString("en-US")} rating votes. The lowest rated is ${L(worst.item)} at ${worst.rating.toFixed(2)} stars, so the whole range is only ` +
       `${(best.rating - worst.rating).toFixed(2)} stars. The average rating across ${t.rated.length} records is ${(sum(t.rated.map(r => r.rating)) / t.rated.length).toFixed(2)}.`,
       "the rating (average of Discogs members' votes, 0 to 5) of every record on the latest day in history.csv; the chart shows the ten highest." + latestNote,
       hbars(t.rated.slice(0, 10).map(r => ({ label: r.item, value: r.rating })), v => v.toFixed(2), "#c58b00")));
@@ -163,7 +163,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   function drawChart() {
     const color = new Map(items.filter(([id]) => state.chosen.has(id)).map(([id], i) => [id, PALETTE[i % PALETTE.length]]));
     el("picker").innerHTML = items.map(([id, name]) =>
-      `<label class="chip${state.chosen.has(id) ? "" : " off"}" style="--c:${color.get(id) || "#bbb"}"><input type="checkbox" data-id="${esc(id)}" ${state.chosen.has(id) ? "checked" : ""}><i></i>${esc(name)}</label>`).join("");
+      `<label class="chip${state.chosen.has(id) ? "" : " off"}" style="--c:${color.get(id) || "#bbb"}"><input type="checkbox" data-id="${esc(id)}" ${state.chosen.has(id) ? "checked" : ""}><i></i>${esc(name)}${ITEM_URL.get(name) ? `<a class="chip-link" href="${esc(ITEM_URL.get(name))}" target="_blank" rel="noopener" title="Open on Discogs" aria-label="${esc(name)} on Discogs">&#8599;</a>` : ""}</label>`).join("");
     const key = GROUPS[state.group];
     const periods = [...new Set(wrows.map(r => key(r.date)))].sort();
     const cell = new Map();                                   // "period|item" -> the values in that period

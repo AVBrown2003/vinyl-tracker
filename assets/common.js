@@ -10,6 +10,10 @@ function renderNav() {
       `<a class="link${href === here ? " current" : ""}" href="${href}">${label}</a>`).join("") +
     "</div>";
   document.body.prepend(nav);
+  // a poster-style filter that gives album covers a little cartoon look
+  document.body.insertAdjacentHTML("afterbegin", '<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><filter id="toon" color-interpolation-filters="sRGB">' +
+    '<feColorMatrix type="saturate" values="1.6"/><feComponentTransfer><feFuncR type="discrete" tableValues="0 .18 .36 .55 .75 .9 1"/>' +
+    '<feFuncG type="discrete" tableValues="0 .18 .36 .55 .75 .9 1"/><feFuncB type="discrete" tableValues="0 .18 .36 .55 .75 .9 1"/></feComponentTransfer></filter></svg>');
 }
 
 function parseCsv(text) {
@@ -46,6 +50,7 @@ const VALUES = {
 };
 const NUMBER_COLUMNS = [...Object.keys(VALUES), "year", "release_id"];
 
+const ITEM_URL = new Map();                  // record name -> its Discogs page
 let servedFromCache = false;
 async function getText(path) {
   const res = await fetch(path, { cache: "no-cache" });
@@ -62,6 +67,7 @@ async function loadData() {
     NUMBER_COLUMNS.forEach(k => { out[k] = r[k] === "" || r[k] === undefined ? null : Number(r[k]); });
     return out;
   });
+  rows.forEach(r => { if (r.url) ITEM_URL.set(r.item, r.url); });
   const status = JSON.parse(statusText);
   if (servedFromCache) {
     const b = document.createElement("div");
@@ -139,12 +145,24 @@ function esc(s) {
   return String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 }
 
-// A small record sleeve: a colour taken from the item key, with the artist's initials.
+// The record's name as a link to its Discogs page (plain text if the page is not known).
+function L(name) {
+  const url = ITEM_URL.get(name);
+  return url ? `<a href="${esc(url)}" target="_blank" rel="noopener">${esc(name)}</a>` : esc(name);
+}
+
+// The album cover in a small box, cartoonized by the toon filter and linking to the Discogs page.
+// If the picture cannot load, the box keeps a colour taken from the item key and the artist's initials.
 function sleeve(row) {
+  if (!row) return "";
   let h = 0;
   for (const c of row.item_id) h = (h * 31 + c.charCodeAt(0)) % 360;
   const initials = (row.artist || row.item).split(/\s+/).filter(w => /^[A-Za-z]/.test(w)).slice(0, 2).map(w => w[0].toUpperCase()).join("");
-  return `<span class="sleeve" style="--h:${h}" aria-hidden="true"><i></i><b>${esc(initials)}</b></span>`;
+  const img = row.cover ? `<img src="${esc(row.cover)}" alt="" loading="lazy" onerror="this.remove()">` : "";
+  const inner = `<b>${esc(initials)}</b>${img}`;
+  return row.url
+    ? `<a class="sleeve" style="--h:${h}" href="${esc(row.url)}" target="_blank" rel="noopener" title="${esc(row.item)} on Discogs" aria-label="${esc(row.item)} on Discogs">${inner}</a>`
+    : `<span class="sleeve" style="--h:${h}" aria-hidden="true">${inner}</span>`;
 }
 
 function showError(err) {

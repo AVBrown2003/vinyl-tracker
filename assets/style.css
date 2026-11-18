@@ -87,12 +87,12 @@ td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
 .fail { color: var(--down); }
 .sub { color: var(--muted); font-size: .85rem; }
 
-/* record sleeve tile */
-.sleeve { position: relative; display: inline-block; width: 34px; height: 34px; border-radius: 4px; vertical-align: middle; margin-right: 10px; flex: none;
-  background: linear-gradient(135deg, hsl(var(--h) 62% 52%), hsl(calc(var(--h) + 40) 58% 36%)); box-shadow: 1px 2px 0 rgba(23, 22, 26, .25); overflow: hidden; }
-.sleeve i { position: absolute; right: -9px; bottom: -9px; width: 24px; height: 24px; border-radius: 50%;
-  background: radial-gradient(circle, #f5f0e6 0 2px, var(--label) 2.5px 5px, #15151a 5.5px); }
-.sleeve b { position: absolute; left: 4px; top: 3px; font-size: .62rem; color: rgba(255, 255, 255, .92); letter-spacing: .03em; }
+/* record sleeve tile: the album cover with a cartoon look; colour and initials show if the picture cannot load */
+.sleeve { position: relative; display: inline-block; width: 42px; height: 42px; border-radius: 5px; vertical-align: middle; margin-right: 11px; flex: none; text-decoration: none;
+  background: linear-gradient(135deg, hsl(var(--h) 62% 52%), hsl(calc(var(--h) + 40) 58% 36%)); border: 2px solid var(--ink); box-shadow: 2px 3px 0 rgba(23, 22, 26, .35); overflow: hidden; transition: transform .15s; }
+.sleeve:hover { transform: rotate(-3deg) scale(1.08); }
+.sleeve b { position: absolute; left: 4px; top: 3px; font-size: .66rem; color: rgba(255, 255, 255, .92); letter-spacing: .03em; }
+.sleeve img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: url(#toon) contrast(1.12); }
 .itemcell { display: flex; align-items: center; }
 .itemcell a { color: var(--ink); font-weight: 600; text-decoration: none; }
 .itemcell a:hover { text-decoration: underline; color: var(--label-dark); }
@@ -151,3 +151,8 @@ footer { color: var(--muted); font-size: .8rem; max-width: 1100px; margin: 0 aut
 .hero .intro { max-width: 62ch; margin: 4px 0 12px; font-size: 1.08rem; line-height: 1.65; color: var(--ink); }
 .hero .intro strong { color: var(--label-dark); }
 .hero .lede { font-size: .9rem; }
+
+.barlink { cursor: pointer; }
+.barlink:hover text { fill: var(--label-dark); text-decoration: underline; }
+.chip-link { color: var(--label-dark); text-decoration: none; font-weight: 700; margin-left: 2px; }
+.chip-link:hover { text-decoration: underline; }
