@@ -2,7 +2,7 @@ name: daily
 
 on:
   schedule:
-    - cron: "7 10 * * *"   # every day, 10:07 UTC
+    - cron: "0 9 * * *"   # every day, 09:00 UTC = 3:00 AM Central (winter time)
   workflow_dispatch:
 
 permissions:
