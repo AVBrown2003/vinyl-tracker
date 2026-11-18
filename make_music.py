@@ -39,6 +39,7 @@ MANUAL = {
     "the-beatles-sgt-peppers-lonely-hearts-club-band": ("A Day in the Life", "usNsCeOV4GM"),
     "queen-greatest-hits": ("Bohemian Rhapsody", "fJ9rUzIMcZQ"),
     "the-beatles-rubber-soul": ("In My Life", "YBcdt6DsLQA"),
+    "kanye-west-my-beautiful-dark-twisted-fantasy": ("Devil in a New Dress", "sk3rpYkiHe8"),
 }
 UA = "VinylVault/1.0 (FDA class project)"
 PAUSE = 0.35
