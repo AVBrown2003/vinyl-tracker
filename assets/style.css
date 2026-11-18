@@ -190,3 +190,10 @@ footer { color: var(--muted); font-size: .8rem; max-width: 1100px; margin: 0 aut
 .music-status { min-height: 1.2em; padding: 2px 14px 0; font-size: .78rem; color: var(--muted); }
 .music-note { margin: 0; padding: 4px 14px 12px; font-size: .74rem; color: var(--muted); line-height: 1.4; }
 @media (max-width: 560px) { .music { right: 8px; bottom: 8px; width: calc(100vw - 16px); } }
+
+/* when the content swaps in place */
+main.swap { animation: pagein .28s ease-out; }
+@keyframes pagein { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { main.swap { animation: none; } }
+
+.hero .intro a { color: var(--label-dark); font-weight: 700; }

@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", async () => {
+(window.PAGES ||= {})["index.html"] = async () => {
   try {
     const { status, rows } = await loadData();
     const el = id => document.getElementById(id);
@@ -50,4 +50,4 @@ document.addEventListener("DOMContentLoaded", async () => {
         `<td class="num">${fmtVal("want", r.want)}</td><td class="num">${fmtVal("rating", r.rating)}</td></tr>`;
     }).join("");
   } catch (err) { showError(err); }
-});
+};

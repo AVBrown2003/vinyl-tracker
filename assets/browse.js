@@ -11,7 +11,7 @@ const SORTABLE = ["year", "lowest_price", "num_for_sale", "have", "want", "ratin
 const SHORT = { year: "Year", lowest_price: "Price", num_for_sale: "For sale", have: "Have", want: "Want", rating: "Rating", rating_votes: "Votes" };
 const LABELS = { year: "Year", ...Object.fromEntries(Object.entries(VALUES).map(([k, v]) => [k, v.label])) };
 
-document.addEventListener("DOMContentLoaded", async () => {
+(window.PAGES ||= {})["browse.html"] = async () => {
   let data;
   try { data = await loadData(); } catch (err) { showError(err); return; }
   const rows = data.rows;
@@ -103,4 +103,4 @@ document.addEventListener("DOMContentLoaded", async () => {
   el("sort-dir").addEventListener("input", () => { state.dir = el("sort-dir").value; render(); });
   ["q", "f-artist", "f-genre", "f-decade", "f-price"].forEach(id => el(id).addEventListener("input", render));
   render();
-});
+};

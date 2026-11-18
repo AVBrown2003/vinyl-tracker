@@ -137,7 +137,9 @@
 
   // hide the small play buttons for records that have no song
   function tidyButtons() {
-    document.querySelectorAll("[data-play]").forEach(b => { if (!songs[b.dataset.play]) b.remove(); });
+    document.querySelectorAll("[data-play]").forEach(b => {
+      if (!songs[b.dataset.play]) b.remove(); else b.classList.toggle("on", b.dataset.play === current);
+    });
   }
 
   async function start() {

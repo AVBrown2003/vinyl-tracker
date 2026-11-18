@@ -174,4 +174,63 @@ function showError(err) {
 document.addEventListener("DOMContentLoaded", () => {
   renderNav();
   if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(() => {});
+  runPage();
 });
+
+// ---- moving between pages without reloading, so the music in the player keeps playing ----
+// Clicking a link to another page fetches it and swaps only the heading and the content; the navigation bar,
+// the player and the page's scripts stay. If anything goes wrong it falls back to a normal page load.
+const PAGE_NAMES = ["index.html", "browse.html", "trends.html"];
+const pageName = u => new URL(u, location.href).pathname.split("/").pop() || "index.html";
+
+function runPage() {
+  const init = (window.PAGES || {})[pageName(location.href)];
+  if (init) init();
+}
+
+async function loadScripts(doc) {                       // load the scripts a page needs that are not loaded yet, in order
+  for (const s of doc.querySelectorAll("script[src]")) {
+    const src = s.getAttribute("src").split("?")[0];
+    if ([...document.scripts].some(x => (x.getAttribute("src") || "").split("?")[0] === src)) continue;
+    await new Promise((ok, fail) => {
+      const t = document.createElement("script");
+      t.src = s.getAttribute("src");
+      t.onload = ok; t.onerror = fail;
+      document.head.appendChild(t);
+    });
+  }
+}
+
+async function goTo(url, push = true) {
+  try {
+    const res = await fetch(url, { cache: "no-cache" });
+    if (!res.ok) throw new Error("page " + res.status);
+    const doc = new DOMParser().parseFromString(await res.text(), "text/html");
+    if (!doc.querySelector("main") || !doc.querySelector(".hero .wrap")) throw new Error("not a page");
+    await loadScripts(doc);
+    document.title = doc.title;
+    document.querySelector(".hero .wrap").innerHTML = doc.querySelector(".hero .wrap").innerHTML;   // the hero itself stays, so the record keeps spinning
+    const main = document.querySelector("main");
+    main.innerHTML = doc.querySelector("main").innerHTML;
+    const foot = document.querySelector("footer");
+    if (foot && doc.querySelector("footer")) foot.innerHTML = doc.querySelector("footer").innerHTML;
+    if (push) history.pushState({}, "", url);
+    window.scrollTo(0, 0);
+    document.querySelectorAll(".nav a.link").forEach(a => a.classList.toggle("current", pageName(a.href) === pageName(url)));
+    main.classList.remove("swap"); void main.offsetWidth; main.classList.add("swap");
+    servedFromCache = false;
+    runPage();
+  } catch (err) { location.href = url; }
+}
+
+document.addEventListener("click", e => {
+  const a = e.target.closest("a[href]");
+  if (!a || e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+  if (a.target && a.target !== "_self") return;
+  const u = new URL(a.href, location.href);
+  if (u.origin !== location.origin || !PAGE_NAMES.includes(pageName(u.href)) || !u.pathname.match(/(\.html|\/)$/)) return;
+  e.preventDefault();
+  if (pageName(u.href) !== pageName(location.href)) goTo(u.href);
+  else window.scrollTo({ top: 0, behavior: "smooth" });
+});
+window.addEventListener("popstate", () => goTo(location.href, false));

@@ -145,7 +145,7 @@ function renderFindings(t, win) {
   return out.join("");
 }
 
-document.addEventListener("DOMContentLoaded", async () => {
+(window.PAGES ||= {})["trends.html"] = async () => {
   let data;
   try { data = await loadData(); } catch (err) { showError(err); return; }
   const el = id => document.getElementById(id);
@@ -211,4 +211,4 @@ document.addEventListener("DOMContentLoaded", async () => {
     drawChart();
   }));
   refresh();
-});
+};
