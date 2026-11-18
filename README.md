@@ -1,6 +1,6 @@
-# Groove Index
+# The Vinyl Vault
 
-*A daily index of the best-selling records on vinyl.*
+*A daily watch on the prices of the best-selling records on vinyl.*
 
 [![tests](https://github.com/AVBrown2003/vinyl-tracker/actions/workflows/tests.yml/badge.svg)](https://github.com/AVBrown2003/vinyl-tracker/actions/workflows/tests.yml)
 

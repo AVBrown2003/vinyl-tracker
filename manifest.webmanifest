@@ -1,6 +1,6 @@
 {
-  "name": "Groove Index",
-  "short_name": "Groove",
+  "name": "The Vinyl Vault",
+  "short_name": "Vault",
   "description": "Daily prices and collector counts for top-selling vinyl records.",
   "start_url": "index.html",
   "scope": "./",

@@ -5,7 +5,7 @@ function renderNav() {
   const here = location.pathname.split("/").pop() || "index.html";
   const nav = document.createElement("nav");
   nav.className = "nav";
-  nav.innerHTML = '<div class="nav-inner"><a class="brand" href="index.html"><span class="disc" aria-hidden="true"></span>Groove Index</a>' +
+  nav.innerHTML = '<div class="nav-inner"><a class="brand" href="index.html"><span class="disc" aria-hidden="true"></span>The Vinyl Vault</a>' +
     PAGES.map(([href, label]) =>
       `<a class="link${href === here ? " current" : ""}" href="${href}">${label}</a>`).join("") +
     "</div>";
