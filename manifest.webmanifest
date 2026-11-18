@@ -1,6 +1,6 @@
 {
-  "name": "Vinyl Tracker",
-  "short_name": "Vinyl",
+  "name": "Groove Index",
+  "short_name": "Groove",
   "description": "Daily prices and collector counts for top-selling vinyl records.",
   "start_url": "index.html",
   "scope": "./",
