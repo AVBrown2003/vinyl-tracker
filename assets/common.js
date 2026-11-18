@@ -73,6 +73,7 @@ async function loadData() {
 }
 
 // ---- the rules the pipeline uses, repeated here so the pages can compute everything in the browser ----
+const dayNum = s => Date.UTC(+s.slice(0, 4), +s.slice(5, 7) - 1, +s.slice(8, 10)) / 86400000;
 const dates = rows => [...new Set(rows.map(r => r.date))].sort();
 function pctChange(a, b) { return a === null || b === null || a === 0 ? null : (b - a) / a * 100; }
 

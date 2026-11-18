@@ -9,10 +9,10 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="assets/icon-192.png">
 <link rel="apple-touch-icon" href="assets/icon-192.png">
-<link rel="stylesheet" href="assets/style.css?v=1">
-<script src="assets/common.js?v=1" defer></script>
-<script src="assets/charts.js?v=1" defer></script>
-<script src="assets/trends.js?v=1" defer></script>
+<link rel="stylesheet" href="assets/style.css?v=2">
+<script src="assets/common.js?v=2" defer></script>
+<script src="assets/charts.js?v=2" defer></script>
+<script src="assets/trends.js?v=2" defer></script>
 </head>
 <body>
 <header class="hero"><div class="wrap">
@@ -21,6 +21,25 @@
   <p class="lede" id="intro">Loading the history...</p>
 </div></header>
 <main>
+  <div class="panel">
+    <h2 style="margin-top:0">Time</h2>
+    <div class="controls" style="grid-template-columns:auto minmax(180px,260px)">
+      <div class="flabel">Window for every number and chart below
+        <div class="seg" id="t-window" style="margin:4px 0 0">
+          <button type="button" data-w="daily" aria-pressed="false">Daily</button>
+          <button type="button" data-w="month" aria-pressed="false">Monthly</button>
+          <button type="button" data-w="year" aria-pressed="false">Yearly</button>
+          <button type="button" data-w="decade" aria-pressed="false">Decade</button>
+          <button type="button" data-w="all" aria-pressed="true">All time</button>
+        </div>
+      </div>
+      <label>Group the chart by
+        <select id="t-group"><option value="day">Day</option><option value="month">Month</option><option value="year">Year</option><option value="decade">Decade</option></select>
+      </label>
+    </div>
+    <p class="note" id="window-note"></p>
+  </div>
+
   <div class="panel">
     <h2 style="margin-top:0">Every value over the days</h2>
     <div class="controls" style="grid-template-columns:minmax(200px,320px) 1fr">

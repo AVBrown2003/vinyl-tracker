@@ -8,7 +8,7 @@ function niceStep(range, ticks) {
 const cut = (s, n) => s.length > n ? s.slice(0, n - 1) + "…" : s;
 
 // series: [{label, color, values: [number|null per day]}]
-function lineChart(days, series, fmt) {
+function lineChart(days, series, fmt, label = d => d.slice(5)) {
   const W = 900, H = 330, L = 64, R = 18, T = 14, B = 40;
   const vals = series.flatMap(s => s.values).filter(v => v !== null);
   if (!vals.length) return '<p class="note">Nothing to draw for this choice.</p>';
@@ -23,7 +23,7 @@ function lineChart(days, series, fmt) {
     g += `<line x1="${L}" x2="${W - R}" y1="${y(t)}" y2="${y(t)}" stroke="#e4dccb"/><text x="${L - 8}" y="${y(t) + 4}" text-anchor="end">${fmt(Math.round(t * 1e6) / 1e6)}</text>`;
   }
   const every = Math.max(1, Math.ceil(days.length / 8));
-  days.forEach((d, i) => { if (i % every === 0 || i === days.length - 1) g += `<text x="${x(i)}" y="${H - 14}" text-anchor="middle">${d.slice(5)}</text>`; });
+  days.forEach((d, i) => { if (i % every === 0 || i === days.length - 1) g += `<text x="${x(i)}" y="${H - 14}" text-anchor="middle">${esc(label(d))}</text>`; });
   series.forEach(s => {
     let d = "", pen = false;
     s.values.forEach((v, i) => { if (v === null) { pen = false; return; } d += (pen ? "L" : "M") + x(i).toFixed(1) + " " + y(v).toFixed(1); pen = true; });
