@@ -87,6 +87,18 @@ Three pages that load `data/status.json` and `data/history.csv` in the browser a
 
 Every time a record's name appears on the site (and in the daily GitHub Issue) it links to that record's Discogs page, and the small box beside it shows its cover with a cartoon filter (a posterizing SVG filter in `assets/common.js`; the covers are loaded straight from Discogs).
 
+## Listen while you scroll
+
+Every page has a **Listen while you scroll** button in the bottom right corner. Open it, pick an album (type its name or choose it from the list), or press the small play button beside any record on the Today and Browse pages, and the album's most popular song plays from YouTube while you keep scrolling. When a song ends the next album starts; there are previous, next, shuffle and volume controls.
+
+Where the songs come from:
+
+- **The video**: Discogs lists YouTube videos on each release. They are part of the data the daily run already downloads, so no extra source is needed for the music itself.
+- **Which song**: Discogs does not say which song is popular, so `make_music.py` ranks the album's songs with the public Deezer API (no login), keeping the highest rank a song has across the album's editions, and picks the most popular song that has a Discogs video. Live, acoustic, remix and cover versions are never chosen, and it checks with YouTube's oEmbed that the video allows embedding. If no song matches, it falls back to the first plain video on the release. `tracker/music.py` holds this logic and `tests/test_music.py` tests it.
+- **The result**: `assets/music.json` (one entry per record: the song, the YouTube video id, and how it was picked). Run `uv run python make_music.py` again if the list of records changes. It is not part of the daily pipeline, so the daily run never depends on Deezer or YouTube.
+
+Records with no usable video have no play button. Music needs a connection to YouTube and stops when you go to another page.
+
 The site is installable (`manifest.webmanifest`, `sw.js`). Online it loads fresh data; offline it opens and shows the last data it loaded.
 
 ## Files
@@ -103,6 +115,7 @@ The site is installable (`manifest.webmanifest`, `sw.js`). Online it loads fresh
 | `tests/test_convert.py` | tests the conversion of the source to the common columns |
 | `tests/test_moves.py` | tests the move rule and appeared/disappeared |
 | `tests/test_build.py` | tests the history: sorting, rebuilding, a failed day, a second run on the same day |
+| `tests/test_music.py` | tests the song and video matching |
 | `tests/test_pipeline.py` | tests the status file, the issue text and issue handling |
 | `.github/workflows/daily.yml` | daily schedule: runs the pipeline and commits `data/` |
 | `.github/workflows/tests.yml` | runs pytest on every push |
@@ -111,6 +124,9 @@ The site is installable (`manifest.webmanifest`, `sw.js`). Online it loads fresh
 | `assets/common.js` | navigation bar, data loading, CSV parser, the move rule |
 | `assets/today.js`, `assets/browse.js`, `assets/trends.js` | page logic |
 | `assets/charts.js` | small SVG chart helpers |
+| `assets/music.js`, `assets/music.json` | the Listen while you scroll player, and the song chosen for each record |
+| `make_music.py` | chooses the song and YouTube video for each record and writes `assets/music.json` |
+| `tracker/music.py` | the rules for choosing the song and matching it to a Discogs video |
 | `manifest.webmanifest`, `sw.js` | installable app and offline support |
 | `assets/icon-192.png`, `assets/icon-512.png`, `make_icons.py` | app icons and the script that draws them |
 | `pyproject.toml`, `uv.lock` | project settings (pytest for development) |
