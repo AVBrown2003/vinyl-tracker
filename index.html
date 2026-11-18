@@ -9,32 +9,22 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="assets/icon-192.png">
 <link rel="apple-touch-icon" href="assets/icon-192.png">
-<link rel="stylesheet" href="assets/style.css?v=8">
-<script src="assets/common.js?v=8" defer></script>
-<script src="assets/today.js?v=8" defer></script>
+<link rel="stylesheet" href="assets/style.css?v=9">
+<script src="assets/common.js?v=9" defer></script>
+<script src="assets/today.js?v=9" defer></script>
 </head>
 <body>
 <header class="hero"><div class="wrap">
   <div class="eyebrow">Vinyl prices and popularity</div>
   <h1>Today</h1>
+  <p class="intro">The Vinyl Vault keeps an eye on <span id="about-n">100</span> well-loved records so you don't have to. Every morning, while you're asleep,
+  it checks Discogs, where collectors around the world buy, sell and show off their shelves, and writes down what each record costs right now, how many copies are
+  up for grabs, how many people own it, how many are still hoping to find one, and how it's rated. Stack those days up and you can see which prices are
+  climbing, which records are getting scarce, and which ones are catching on. Flip through <strong>Browse</strong> to search and star your favorites,
+  or head to <strong>Trends</strong> for the bigger picture.</p>
   <p class="lede">Last run: <strong id="run-time">loading...</strong></p>
 </div></header>
 <main>
-  <section class="about" aria-labelledby="about-h">
-    <h2 id="about-h">What this site does</h2>
-    <p>The Vinyl Vault is a <strong>price and popularity tracker for vinyl records</strong>. Every morning, on its own, it looks up
-    <strong><span id="about-n">100</span> well-known albums</strong> on Discogs, the largest database of records and the place where collectors buy and sell them, and adds the day's numbers to a growing history.</p>
-    <p><strong>For every record, every day, it tracks:</strong></p>
-    <ul>
-      <li><strong>Lowest price</strong> - the cheapest copy currently for sale, in US dollars</li>
-      <li><strong>Copies for sale</strong> - how many copies are listed right now</li>
-      <li><strong>Collectors who have it</strong> and <strong>collectors who want it</strong> - a sign of how popular and how scarce a record is</li>
-      <li><strong>Rating</strong> - the average of collectors' star ratings, and how many votes it rests on</li>
-    </ul>
-    <p>From that history it works out which prices <strong>moved the most</strong> since yesterday, and which record is <strong>rising fastest in popularity</strong> for the day, week, month, year and decade (the record that gained the most collectors).
-    Use <strong>Browse</strong> to filter, search, sort and star records, and <strong>Trends</strong> for charts and findings over time. The data updates by itself at about 3:00 AM Central.</p>
-  </section>
-
   <div class="cards">
     <div class="card"><div class="num" id="n-days">-</div><div class="lab">days with a successful run</div></div>
     <div class="card"><div class="num" id="n-items">-</div><div class="lab">records tracked</div></div>
