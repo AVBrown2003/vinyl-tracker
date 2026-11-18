@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Trends - Vinyl Tracker</title>
+<meta name="description" content="What the history says: price moves, spreads, scarcity and demand across the tracked records.">
+<meta name="theme-color" content="#17161a">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="assets/icon-192.png">
+<link rel="apple-touch-icon" href="assets/icon-192.png">
+<link rel="stylesheet" href="assets/style.css?v=1">
+<script src="assets/common.js?v=1" defer></script>
+<script src="assets/charts.js?v=1" defer></script>
+<script src="assets/trends.js?v=1" defer></script>
+</head>
+<body>
+<header class="hero"><div class="wrap">
+  <div class="eyebrow">What the history says</div>
+  <h1>Trends</h1>
+  <p class="lede" id="intro">Loading the history...</p>
+</div></header>
+<main>
+  <div class="panel">
+    <h2 style="margin-top:0">Every value over the days</h2>
+    <div class="controls" style="grid-template-columns:minmax(200px,320px) 1fr">
+      <label>Value <select id="t-value"></select></label>
+      <div class="flabel">Records shown
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px">
+          <button type="button" class="btn" data-pick="top">Top 5 by price</button>
+          <button type="button" class="btn" data-pick="all">All</button>
+          <button type="button" class="btn" data-pick="none">None</button>
+        </div>
+      </div>
+    </div>
+    <div class="picker" id="picker"></div>
+    <div class="chart" id="line-chart"></div>
+    <p class="note" id="line-note"></p>
+  </div>
+
+  <div id="findings"></div>
+</main>
+<footer>Every number on this page is computed in your browser from data/history.csv, so it changes as the history grows.</footer>
+</body>
+</html>
