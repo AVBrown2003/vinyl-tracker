@@ -67,7 +67,7 @@ def compare(rows: list[dict], date: str, top: int = TOP_MOVES) -> dict:
         change = pct_change(old.get(MOVE_COLUMN), new.get(MOVE_COLUMN))
         if change:
             moves.append({
-                "item_id": item_id, "item": new["item"],
+                "item_id": item_id, "item": new["item"], "url": new.get("url"),
                 "old": old[MOVE_COLUMN], "new": new[MOVE_COLUMN], "pct": change,
                 "old_for_sale": old.get("num_for_sale"), "new_for_sale": new.get("num_for_sale"),
             })

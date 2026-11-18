@@ -22,6 +22,7 @@ def test_convert_gives_one_row_per_item_with_every_value():
     assert (r["rating"], r["rating_votes"], r["year"], r["currency"]) == (4.5, 30, 2020, "USD")
     assert r["genre"] == "Rock" and r["format"] == "Vinyl, LP, Album" and r["country"] == "US"
     assert r["url"] == f"https://www.discogs.com/release/{ITEMS[0].release_id}"
+    assert r["cover"] == f"https://i.discogs.com/cover-{ITEMS[0].release_id}.jpeg"
 
 
 def test_every_value_column_is_a_number():
@@ -37,6 +38,15 @@ def test_a_value_the_source_does_not_report_is_empty():
     assert rows[1]["lowest_price"] is None and rows[1]["have"] is None and rows[1]["item"] == ITEMS[1].name
 
 
+def test_cover_falls_back_to_the_first_image_and_may_be_empty():
+    doc = {"items": [entry(ITEMS[0]), entry(ITEMS[1])]}
+    del doc["items"][0]["release"]["thumb"]
+    doc["items"][0]["release"]["images"] = [{"uri150": "https://i.discogs.com/small.jpeg"}]
+    del doc["items"][1]["release"]["thumb"]
+    rows = sources.convert_discogs(doc)
+    assert rows[0]["cover"] == "https://i.discogs.com/small.jpeg" and rows[1]["cover"] is None
+
+
 def test_unknown_item_is_ignored():
     doc = {"items": [{"item_id": "not-a-tracked-record", "stats": {}, "release": {}}]}
     assert sources.convert_discogs(doc) == []
@@ -44,7 +54,7 @@ def test_unknown_item_is_ignored():
 
 def test_history_columns_start_with_the_four_fixed_ones():
     assert build.COLUMNS[:4] == ["date", "item_id", "item", "source"]
-    assert {"lowest_price", "num_for_sale", "have", "want"} <= set(build.COLUMNS)
+    assert {"lowest_price", "num_for_sale", "have", "want", "cover"} <= set(build.COLUMNS)
     assert set(build.COLUMNS) >= {"artist", "album", "year", "genre", "currency", "url"}
 
 

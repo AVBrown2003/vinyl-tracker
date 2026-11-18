@@ -63,6 +63,12 @@ def _price(value) -> str:
 
 def issue_body(rows: list[dict], date: str, status: dict) -> str:
     changes = moves.compare(rows, date)
+    urls = {r["item"]: r.get("url") for r in rows}
+
+    def link(name: str) -> str:
+        """The record's name as a link to its Discogs page."""
+        return f"[{name}]({urls[name]})" if urls.get(name) else name
+
     failed = [s["name"] for s in status["sources"] if not s["ok"]]
     out = [f"Run {status['run_time']} UTC. {status['items']} items, "
            f"{status['new_today']} appeared, {status['gone_today']} disappeared."]
@@ -76,7 +82,7 @@ def issue_body(rows: list[dict], date: str, status: dict) -> str:
         if changes["moves"]:
             out += ["| Record | Old price | New price | Change | Copies for sale |", "|---|---|---|---|---|"]
             for m in changes["moves"]:
-                out.append(f"| {m['item']} | {_price(m['old'])} | {_price(m['new'])} | {m['pct']:+.1f}% | "
+                out.append(f"| {link(m['item'])} | {_price(m['old'])} | {_price(m['new'])} | {m['pct']:+.1f}% | "
                            f"{m['old_for_sale'] if m['old_for_sale'] is not None else '-'} to "
                            f"{m['new_for_sale'] if m['new_for_sale'] is not None else '-'} |")
         else:
@@ -86,11 +92,11 @@ def issue_body(rows: list[dict], date: str, status: dict) -> str:
                 "Popularity is counted in collectors: the record that gained the most collectors who say they have it."]
         if gains and gains[0]["gain"] > 0:
             g = gains[0]
-            out.append(f"**{g['item']}**: +{g['gain']:,} collectors ({g['old']:,} to {g['new']:,}).")
+            out.append(f"**{link(g['item'])}**: +{g['gain']:,} collectors ({g['old']:,} to {g['new']:,}).")
         else:
             out.append("No record gained collectors.")
-        out += ["", f"## Appeared ({len(changes['appeared'])})", *([f"- {n}" for n in changes["appeared"]] or ["- none"]),
-                "", f"## Disappeared ({len(changes['disappeared'])})", *([f"- {n}" for n in changes["disappeared"]] or ["- none"])]
+        out += ["", f"## Appeared ({len(changes['appeared'])})", *([f"- {link(n)}" for n in changes["appeared"]] or ["- none"]),
+                "", f"## Disappeared ({len(changes['disappeared'])})", *([f"- {link(n)}" for n in changes["disappeared"]] or ["- none"])]
     return "\n".join(out)
 
 

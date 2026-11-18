@@ -41,10 +41,12 @@ def test_issue_lists_biggest_moves_with_old_and_new_values(repo):
     st = pipeline.make_status(rows, results, "2026-03-02T09:00:00Z", "2026-03-02")
     body = pipeline.issue_body(rows, "2026-03-02", st)
     assert "Biggest price moves since 2026-03-01" in body
-    assert f"| {ITEMS[0].name} | $10.00 | $15.00 | +50.0% |" in body
+    url0 = f"https://www.discogs.com/release/{ITEMS[0].release_id}"
+    assert f"| [{ITEMS[0].name}]({url0}) | $10.00 | $15.00 | +50.0% |" in body       # the name links to Discogs
     assert "## Biggest popularity gain since 2026-03-01" in body and "collectors" in body
     assert ITEMS[1].name not in body.split("## Appeared")[0].split("## Biggest popularity gain")[0]    # did not move
-    assert f"- {ITEMS[2].name}" in body.split("## Appeared")[1]
+    assert f"- [{ITEMS[2].name}](https://www.discogs.com/release/{ITEMS[2].release_id})" in body.split("## Appeared")[1]
+    assert f"- [{ITEMS[1].name}]" not in body.split("## Appeared")[1].split("## Disappeared")[0]
 
 
 def test_issue_on_a_day_with_no_changes_still_has_text(repo):

@@ -16,7 +16,7 @@ def entry(item, price=10.0, for_sale=5, have=100, want=20, rating=4.5, votes=30,
         "item_id": item.item_id, "release_id": item.release_id, "errors": [],
         "stats": {"num_for_sale": for_sale, "blocked_from_sale": False,
                   "lowest_price": None if price is None else {"value": price, "currency": currency}},
-        "release": {"year": year, "country": "US", "genres": ["Rock"],
+        "release": {"year": year, "country": "US", "genres": ["Rock"], "thumb": f"https://i.discogs.com/cover-{item.release_id}.jpeg",
                     "formats": [{"name": "Vinyl", "descriptions": ["LP", "Album"]}],
                     "community": {"have": have, "want": want, "rating": {"average": rating, "count": votes}}},
     }

@@ -31,7 +31,7 @@ MIN_OK_SHARE = 0.5   # the source counts as failed if fewer than half of the rec
 
 # the columns every source converts to (after date, item_id, item and source)
 VALUE_COLUMNS = ["lowest_price", "num_for_sale", "have", "want", "rating", "rating_votes"]
-EXTRA_COLUMNS = ["artist", "album", "year", "genre", "format", "country", "release_id", "currency", "url"]
+EXTRA_COLUMNS = ["artist", "album", "year", "genre", "format", "country", "release_id", "currency", "url", "cover"]
 
 
 @dataclass
@@ -102,6 +102,7 @@ def convert_discogs(payload: dict) -> list[dict]:
         community = release.get("community") or {}
         rating = community.get("rating") or {}
         low = stats.get("lowest_price") or {}
+        images = release.get("images") or [{}]
         formats = release.get("formats") or [{}]
         genres = release.get("genres") or []
         rows.append({
@@ -115,6 +116,7 @@ def convert_discogs(payload: dict) -> list[dict]:
             "country": release.get("country"),
             "release_id": item.release_id,
             "url": f"https://www.discogs.com/release/{item.release_id}",
+            "cover": release.get("thumb") or images[0].get("uri150") or None,
             "lowest_price": _number(low.get("value")),
             "currency": low.get("currency"),
             "num_for_sale": _number(stats.get("num_for_sale")),
