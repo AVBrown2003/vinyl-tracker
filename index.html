@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Today - Vinyl Tracker</title>
+<meta name="description" content="Daily prices and collector counts for top-selling vinyl records.">
+<meta name="theme-color" content="#17161a">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="assets/icon-192.png">
+<link rel="apple-touch-icon" href="assets/icon-192.png">
+<link rel="stylesheet" href="assets/style.css?v=1">
+<script src="assets/common.js?v=1" defer></script>
+<script src="assets/today.js?v=1" defer></script>
+</head>
+<body>
+<header class="hero"><div class="wrap">
+  <div class="eyebrow">Top-selling vinyl records</div>
+  <h1>Today</h1>
+  <p class="lede">Last run: <strong id="run-time">loading...</strong></p>
+</div></header>
+<main>
+  <div class="cards">
+    <div class="card"><div class="num" id="n-days">-</div><div class="lab">days with a successful run</div></div>
+    <div class="card"><div class="num" id="n-items">-</div><div class="lab">records tracked</div></div>
+    <div class="card"><div class="num" id="n-new">-</div><div class="lab">appeared today</div></div>
+    <div class="card"><div class="num" id="n-gone">-</div><div class="lab">disappeared today</div></div>
+  </div>
+
+  <h2>Source</h2>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Source</th><th class="num">Records returned</th><th>Status</th></tr></thead>
+    <tbody id="sources"></tbody>
+  </table></div>
+
+  <h2>Biggest moves since the previous run</h2>
+  <p class="note" id="move-note"></p>
+  <ul class="list" id="moves"></ul>
+
+  <h2>Latest values</h2>
+  <p class="note" id="latest-note"></p>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Record</th><th class="num">Lowest price</th><th class="num">Change</th><th class="num">Copies for sale</th><th class="num">Have</th><th class="num">Want</th><th class="num">Rating</th></tr></thead>
+    <tbody id="latest"></tbody>
+  </table></div>
+  <p class="note">Change is the move in the lowest asking price since the previous run. Prices are in US dollars, from the Discogs marketplace.</p>
+</main>
+<footer>Data from the public Discogs database API. Updated once a day by GitHub Actions.</footer>
+</body>
+</html>
