@@ -19,6 +19,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   const all = dates(rows);
   if (!all.length) { el("count").textContent = "No data yet."; return; }
   const latest = rows.filter(r => r.date === all[all.length - 1]);
+  el("browse-n").textContent = latest.length;
+  el("q").placeholder = `Search the ${latest.length} records`;
   const stars = loadStars();
   const state = { scope: "all", col: "lowest_price", dir: "desc" };
   const decade = r => r.year === null ? "" : Math.floor(r.year / 10) * 10 + "s";

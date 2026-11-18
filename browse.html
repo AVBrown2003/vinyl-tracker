@@ -9,15 +9,15 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="assets/icon-192.png">
 <link rel="apple-touch-icon" href="assets/icon-192.png">
-<link rel="stylesheet" href="assets/style.css?v=10">
-<script src="assets/common.js?v=10" defer></script>
-<script src="assets/browse.js?v=10" defer></script>
+<link rel="stylesheet" href="assets/style.css?v=11">
+<script src="assets/common.js?v=11" defer></script>
+<script src="assets/browse.js?v=11" defer></script>
 </head>
 <body>
 <header class="hero"><div class="wrap">
   <div class="eyebrow">Every record</div>
-  <h1>Browse records</h1>
-  <p class="lede">Latest values for every tracked record. Filter, search, click a column to sort, and star the ones you want to keep an eye on.</p>
+  <h1>Browse the records</h1>
+  <p class="lede">These are the <span id="browse-n">100</span> records The Vinyl Vault follows, and only these. It is a fixed list, so you will not find other albums here. Filter it, search it, click a column to sort, and star the ones you want to keep an eye on.</p>
 </div></header>
 <main>
   <div class="panel">
@@ -26,7 +26,7 @@
       <button type="button" data-v="star" aria-pressed="false">★ Shortlist</button>
     </div>
     <div class="controls">
-      <label>Search names <input type="search" id="q" autocomplete="off" placeholder="Type an artist or album"></label>
+      <label>Search names <input type="search" id="q" autocomplete="off" placeholder="Search the 100 records"></label>
       <label>Artist <select id="f-artist"></select></label>
       <label>Genre <select id="f-genre"></select></label>
       <label>Released <select id="f-decade"></select></label>
