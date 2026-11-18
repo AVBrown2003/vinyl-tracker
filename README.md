@@ -57,6 +57,7 @@ One row per record per day, sorted by `date`, then `item_id`. Dates are UTC date
 | `country` | country of the pressing | text |
 | `release_id` | Discogs release id of the tracked pressing | number |
 | `url` | the release's page on Discogs | URL |
+| `cover` | thumbnail of the pressing's cover from Discogs (150 pixels), shown on the site | URL |
 
 `data/status.json` describes the latest run: `run_time` (UTC), `first_run_date` (date of the earliest raw file), `days_with_success` (number of different dates with a raw file), `items` (records in the latest run), `new_today` (records that appeared), `gone_today` (records that disappeared) and `sources` (a list of `name`, `ok`, `count`).
 
@@ -83,6 +84,8 @@ Three pages that load `data/status.json` and `data/history.csv` in the browser a
 - **Today** (`index.html`): time of the last run, status of the source, the counts, the latest values of every record with its price change since the previous run, and the five biggest moves, and the record **rising fastest in popularity** for each period (see below).
 - **Browse** (`browse.html`): the latest values of every record, filters (artist, genre, decade, highest price), a search box for names, sorting by every numeric column up and down (click a heading), and a star on every record that saves it to a shortlist kept in the browser.
 - **Trends** (`trends.html`): a time control and a chart of any value over the days with a control to pick records, and seven sections whose headings state a finding (price change since the first run, the biggest one-day move, the popularity gain, the price spread, collector demand, scarcity, ratings). Each gives the numbers and how they are computed from the history file, with a chart. All numbers are computed in the browser from `history.csv`. The **window** buttons (Daily = the latest run against the previous run, Weekly = the last 7 days, Monthly = the last 30 days, Yearly = the last 365 days, Decade = the last 10 years, All time) decide which dates every finding and the chart use, counted back from the latest date in the history; the findings about the latest day (price spread, demand, scarcity, ratings) always use the latest day. **Group the chart by** day, month, year or decade draws one point per period, each the average of the days in it.
+
+Every time a record's name appears on the site (and in the daily GitHub Issue) it links to that record's Discogs page, and the small box beside it shows its cover with a cartoon filter (a posterizing SVG filter in `assets/common.js`; the covers are loaded straight from Discogs).
 
 The site is installable (`manifest.webmanifest`, `sw.js`). Online it loads fresh data; offline it opens and shows the last data it loaded.
 
