@@ -918,5 +918,85 @@
   "video_title": "Amy Winehouse - Take The Box",
   "how": "top",
   "rank": 251961
+ },
+ "oasis-whats-the-story-morning-glory": {
+  "item": "Oasis - (What's The Story) Morning Glory?",
+  "artist": "Oasis",
+  "album": "(What's The Story) Morning Glory?",
+  "song": "Don't Look Back in Anger",
+  "video": "r8OipmKFDeM",
+  "video_title": "",
+  "how": "chosen",
+  "rank": null
+ },
+ "radiohead-in-rainbows": {
+  "item": "Radiohead - In Rainbows",
+  "artist": "Radiohead",
+  "album": "In Rainbows",
+  "song": "Weird Fishes / Arpeggi",
+  "video": "LUjGtyYEi90",
+  "video_title": "",
+  "how": "chosen",
+  "rank": null
+ },
+ "radiohead-kid-a": {
+  "item": "Radiohead - Kid A",
+  "artist": "Radiohead",
+  "album": "Kid A",
+  "song": "Everything in Its Right Place",
+  "video": "Ni1RPW7D96E",
+  "video_title": "",
+  "how": "chosen",
+  "rank": null
+ },
+ "taylor-swift-1989-taylors-version": {
+  "item": "Taylor Swift - 1989 (Taylor's Version)",
+  "artist": "Taylor Swift",
+  "album": "1989 (Taylor's Version)",
+  "song": "Wildest Dreams",
+  "video": "IdneKLhsWOQ",
+  "video_title": "",
+  "how": "chosen",
+  "rank": null
+ },
+ "the-beatles-abbey-road": {
+  "item": "The Beatles - Abbey Road",
+  "artist": "The Beatles",
+  "album": "Abbey Road",
+  "song": "Here Comes the Sun",
+  "video": "KQetemT1sWc",
+  "video_title": "",
+  "how": "chosen",
+  "rank": null
+ },
+ "the-beatles-sgt-peppers-lonely-hearts-club-band": {
+  "item": "The Beatles - Sgt. Pepper's Lonely Hearts Club Band",
+  "artist": "The Beatles",
+  "album": "Sgt. Pepper's Lonely Hearts Club Band",
+  "song": "A Day in the Life",
+  "video": "usNsCeOV4GM",
+  "video_title": "",
+  "how": "chosen",
+  "rank": null
+ },
+ "queen-greatest-hits": {
+  "item": "Queen - Greatest Hits",
+  "artist": "Queen",
+  "album": "Greatest Hits",
+  "song": "Bohemian Rhapsody",
+  "video": "fJ9rUzIMcZQ",
+  "video_title": "",
+  "how": "chosen",
+  "rank": null
+ },
+ "the-beatles-rubber-soul": {
+  "item": "The Beatles - Rubber Soul",
+  "artist": "The Beatles",
+  "album": "Rubber Soul",
+  "song": "In My Life",
+  "video": "YBcdt6DsLQA",
+  "video_title": "",
+  "how": "chosen",
+  "rank": null
  }
 }

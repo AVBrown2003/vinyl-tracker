@@ -7,6 +7,7 @@
     popular: "one of the album's most popular songs",
     listed: "a song from the album",
     album: "the whole album",
+    chosen: "a hand-picked song from the album",
   };
   let songs = {}, order = [], current = null, player = null, apiPromise = null, volume = 70, shuffle = false;
 

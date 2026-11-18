@@ -6,7 +6,8 @@ For every record in tracker/items.py:
   1. read its Discogs videos from the latest raw file in data/raw/
   2. rank the album's songs with the public Deezer API (no login)
   3. pick the most popular song that has a Discogs video (tracker/music.py)
-  4. ask YouTube's oEmbed whether that video may be embedded; if not, try the next one
+  4. put the hand-picked songs (MANUAL, below) over the top
+  5. ask YouTube's oEmbed whether that video may be embedded; if not, try the next one
 and write assets/music.json. Run it again whenever the list of records changes. It is not part of
 the daily pipeline, so the daily run does not depend on Deezer or YouTube.
 """
@@ -26,6 +27,19 @@ from tracker import build, music
 from tracker.items import ITEMS
 
 OUT = Path(__file__).parent / "assets" / "music.json"
+
+# Songs picked by hand. These records have no usable Discogs video, or the owner picked a different song.
+# A hand pick always wins over the automatic choice. The video must allow embedding (checked when this runs).
+MANUAL = {
+    "oasis-whats-the-story-morning-glory": ("Don't Look Back in Anger", "r8OipmKFDeM"),
+    "radiohead-in-rainbows": ("Weird Fishes / Arpeggi", "LUjGtyYEi90"),
+    "radiohead-kid-a": ("Everything in Its Right Place", "Ni1RPW7D96E"),
+    "taylor-swift-1989-taylors-version": ("Wildest Dreams", "IdneKLhsWOQ"),
+    "the-beatles-abbey-road": ("Here Comes the Sun", "KQetemT1sWc"),
+    "the-beatles-sgt-peppers-lonely-hearts-club-band": ("A Day in the Life", "usNsCeOV4GM"),
+    "queen-greatest-hits": ("Bohemian Rhapsody", "fJ9rUzIMcZQ"),
+    "the-beatles-rubber-soul": ("In My Life", "YBcdt6DsLQA"),
+}
 UA = "VinylVault/1.0 (FDA class project)"
 PAUSE = 0.35
 
@@ -86,6 +100,19 @@ def deezer_tracks(artist: str, album: str) -> list[dict]:
     return list(best.values())
 
 
+def apply_manual(out: dict) -> None:
+    """Put the hand-picked songs in `out` (replacing any automatic choice)."""
+    by_id = {i.item_id: i for i in ITEMS}
+    for item_id, (song, video) in MANUAL.items():
+        item = by_id[item_id]
+        if not embeddable(video):
+            print("NOT EMBEDDABLE, skipped hand pick:", item.name, video)
+            continue
+        out[item_id] = {"item": item.name, "artist": item.artist, "album": item.album,
+                        "song": song, "video": video, "video_title": "", "how": "chosen", "rank": None}
+        print(f"{'chosen':8}", item.name, "->", song, "|", video)
+
+
 LONG_VIDEO_SECONDS = 15 * 60
 
 
@@ -108,6 +135,12 @@ def load_videos() -> dict:
 
 
 def main() -> int:
+    if "--manual" in sys.argv:                                  # only merge the hand picks into the existing file
+        out = json.loads(OUT.read_text(encoding="utf-8"))
+        apply_manual(out)
+        OUT.write_text(json.dumps(out, indent=1, ensure_ascii=False) + "\n", encoding="utf-8")
+        print("wrote", OUT, len(out), "records")
+        return 0
     if "--relabel" in sys.argv:                                 # only redo the labels of the existing file
         out = json.loads(OUT.read_text(encoding="utf-8"))
         label_long_videos(out, load_videos())
@@ -140,6 +173,7 @@ def main() -> int:
         out[item.item_id] = {"item": item.name, "artist": item.artist, "album": item.album, **choice}
         print(f"{choice['how']:8}", item.name, "->", choice["song"], "|", choice["video"])
     label_long_videos(out, videos_by_item)
+    apply_manual(out)
     OUT.parent.mkdir(exist_ok=True)
     OUT.write_text(json.dumps(out, indent=1, ensure_ascii=False) + "\n", encoding="utf-8")
     print("wrote", OUT, len(out), "records", counts)
