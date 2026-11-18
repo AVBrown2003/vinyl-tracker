@@ -81,6 +81,14 @@ def issue_body(rows: list[dict], date: str, status: dict) -> str:
                            f"{m['new_for_sale'] if m['new_for_sale'] is not None else '-'} |")
         else:
             out.append("No record's lowest price moved.")
+        gains = moves.collector_gains(rows, date)["gains"]
+        out += ["", f"## Top seller since {changes['previous']}",
+                "Discogs does not publish sales, so this is the record that gained the most collectors who have it."]
+        if gains and gains[0]["gain"] > 0:
+            g = gains[0]
+            out.append(f"**{g['item']}**: +{g['gain']:,} collectors ({g['old']:,} to {g['new']:,}).")
+        else:
+            out.append("No record gained collectors.")
         out += ["", f"## Appeared ({len(changes['appeared'])})", *([f"- {n}" for n in changes["appeared"]] or ["- none"]),
                 "", f"## Disappeared ({len(changes['disappeared'])})", *([f"- {n}" for n in changes["disappeared"]] or ["- none"])]
     return "\n".join(out)

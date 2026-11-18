@@ -39,6 +39,22 @@ def test_appeared_and_disappeared():
     assert out["appeared"] == ["C"] and out["disappeared"] == ["A"]
 
 
+def hrow(date, item_id, have):
+    return {"date": date, "item_id": item_id, "item": item_id.upper(), "have": have}
+
+
+def test_top_seller_is_the_record_that_gained_the_most_collectors():
+    rows = [hrow("d1", "a", 100), hrow("d1", "b", 50), hrow("d1", "c", None),
+            hrow("d2", "a", 110), hrow("d2", "b", 90), hrow("d2", "c", 70), hrow("d2", "d", 5)]
+    out = moves.collector_gains(rows, "d2")
+    assert out["previous"] == "d1"
+    assert [(g["item_id"], g["gain"]) for g in out["gains"]] == [("b", 40), ("a", 10)]   # c had no count before, d is new
+
+
+def test_top_seller_needs_a_previous_run():
+    assert moves.collector_gains([hrow("d1", "a", 1)], "d1") == {"previous": None, "gains": []}
+
+
 def test_first_run_has_nothing_to_compare():
     out = moves.compare([row("d1", "a", 1)], "d1")
     assert out == {"previous": None, "moves": [], "appeared": [], "disappeared": []}
