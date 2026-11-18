@@ -5,6 +5,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     el("run-time").textContent = status.run_time.replace("T", " ").replace("Z", " UTC");
     el("n-days").textContent = status.days_with_success;
     el("n-items").textContent = status.items;
+    el("about-n").textContent = status.items;
     el("n-new").textContent = status.new_today;
     el("n-gone").textContent = status.gone_today;
 
