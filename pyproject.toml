@@ -1,0 +1,12 @@
+[project]
+name = "vinyl-tracker"
+version = "0.1.0"
+description = "Daily tracker of prices and collector counts for top-selling vinyl records"
+requires-python = ">=3.11"
+dependencies = []
+
+[dependency-groups]
+dev = ["pytest>=8"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
