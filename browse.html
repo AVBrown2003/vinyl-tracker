@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Browse - Vinyl Tracker</title>
+<meta name="description" content="Browse every tracked vinyl record: filter, search, sort and save a shortlist.">
+<meta name="theme-color" content="#17161a">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="assets/icon-192.png">
+<link rel="apple-touch-icon" href="assets/icon-192.png">
+<link rel="stylesheet" href="assets/style.css?v=1">
+<script src="assets/common.js?v=1" defer></script>
+<script src="assets/browse.js?v=1" defer></script>
+</head>
+<body>
+<header class="hero"><div class="wrap">
+  <div class="eyebrow">Every record</div>
+  <h1>Browse records</h1>
+  <p class="lede">Latest values for every tracked record. Filter, search, click a column to sort, and star the ones you want to keep an eye on.</p>
+</div></header>
+<main>
+  <div class="panel">
+    <div class="seg" id="scope">
+      <button type="button" data-v="all" aria-pressed="true">All records</button>
+      <button type="button" data-v="star" aria-pressed="false">★ Shortlist</button>
+    </div>
+    <div class="controls">
+      <label>Search names <input type="search" id="q" autocomplete="off" placeholder="Type an artist or album"></label>
+      <label>Artist <select id="f-artist"></select></label>
+      <label>Genre <select id="f-genre"></select></label>
+      <label>Released <select id="f-decade"></select></label>
+      <label>Highest price ($) <input type="number" id="f-price" min="0" step="1" placeholder="No limit"></label>
+      <label>Sort by <select id="sort-col"></select></label>
+      <label>Direction
+        <select id="sort-dir"><option value="desc">High to low</option><option value="asc">Low to high</option></select>
+      </label>
+    </div>
+  </div>
+
+  <div class="count" id="count"></div>
+  <div class="tablewrap"><table>
+    <thead><tr id="head"></tr></thead>
+    <tbody id="results"></tbody>
+  </table></div>
+  <p class="note">Click any column heading to sort by it; click again to reverse. Your shortlist is saved in this browser.</p>
+</main>
+<footer>Stars are stored on this device only.</footer>
+</body>
+</html>
