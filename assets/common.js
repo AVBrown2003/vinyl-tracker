@@ -99,6 +99,39 @@ function compareDays(rows, date, top = 5) {
   };
 }
 
+// The time window for every number and chart. Daily = the latest run and the one before it;
+// the others are measured back from the latest date in the history.
+const WINDOWS = {
+  daily:  { label: "Daily",    phrase: "since the previous run",  text: "the latest run compared with the previous run" },
+  week:   { label: "Weekly",   phrase: "over the last 7 days",    text: "the last 7 days", days: 7 },
+  month:  { label: "Monthly",  phrase: "over the last 30 days",   text: "the last 30 days", days: 30 },
+  year:   { label: "Yearly",   phrase: "over the last 365 days",  text: "the last 365 days", days: 365 },
+  decade: { label: "Decade",   phrase: "over the last 10 years",  text: "the last 10 years", days: 3650 },
+  all:    { label: "All time", phrase: "since the first run",     text: "all of the history" },
+};
+
+function windowRows(rows, key) {
+  const all = dates(rows);
+  if (key === "all" || !all.length) return rows;
+  if (key === "daily") { const keep = new Set(all.slice(-2)); return rows.filter(r => keep.has(r.date)); }
+  const cutoff = dayNum(all[all.length - 1]) - WINDOWS[key].days;
+  return rows.filter(r => dayNum(r.date) >= cutoff);
+}
+
+// Top seller. Discogs does not publish sales, so the signal is how many collectors newly say they have a
+// record: gain = collectors at the end of the window - collectors at the start (`have`, first and last day with a count).
+function collectorGains(rows) {
+  const byItem = new Map();
+  rows.forEach(r => { if (r.have !== null) { if (!byItem.has(r.item_id)) byItem.set(r.item_id, []); byItem.get(r.item_id).push(r); } });
+  const out = [];
+  byItem.forEach(list => {
+    if (list.length < 2) return;
+    const a = list[0], b = list[list.length - 1];
+    out.push({ item: b.item, id: b.item_id, from: a.have, to: b.have, gain: b.have - a.have, fromDate: a.date, toDate: b.date });
+  });
+  return out.sort((x, y) => y.gain - x.gain || x.item.localeCompare(y.item));
+}
+
 const fmtPct = p => p === null || p === undefined ? "-" : Math.abs(p) < 0.05 ? "0.0%" : (p > 0 ? "+" : "") + p.toFixed(1) + "%";
 const fmtVal = (col, v) => v === null || v === undefined ? "-" : VALUES[col].fmt(v);
 const runDate = status => status.run_time.slice(0, 10);

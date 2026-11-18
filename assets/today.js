@@ -26,6 +26,15 @@ document.addEventListener("DOMContentLoaded", async () => {
       `<span class="${m.pct > 0 ? "up" : "down"}">${fmtPct(m.pct)}</span></li>`).join("")
       : `<li class="empty">${diff.previous ? "No record's lowest price moved." : "Nothing to show yet."}</li>`;
 
+    el("sellers").innerHTML = ["daily", "week", "month", "year", "decade"].map(k => {
+      const g = collectorGains(windowRows(rows, k));
+      const label = `<td><strong>${WINDOWS[k].label}</strong><div class="sub">${WINDOWS[k].text}</div></td>`;
+      if (!g.length) return `<tr>${label}<td class="sub" colspan="3">Not enough history yet (needs two runs in the period).</td></tr>`;
+      const top = g[0];
+      return `<tr>${label}<td class="name"><div class="itemcell">${top.gain > 0 ? "" : ""}<strong>${esc(top.item)}</strong></div></td>` +
+        `<td class="num up">${top.gain > 0 ? "+" : ""}${top.gain.toLocaleString("en-US")}</td><td class="sub">${top.fromDate} to ${top.toDate}</td></tr>`;
+    }).join("");
+
     el("latest-note").textContent = `Values from the run on ${latest}.`;
     const today = rows.filter(r => r.date === latest).sort((a, b) => (b.lowest_price ?? -1) - (a.lowest_price ?? -1));
     el("latest").innerHTML = today.map(r => {

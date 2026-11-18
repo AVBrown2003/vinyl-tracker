@@ -3,24 +3,6 @@ const usd = money;
 const sum = a => a.reduce((x, y) => x + y, 0);
 const median = a => { const s = [...a].sort((x, y) => x - y), m = s.length >> 1; return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2; };
 
-// The time window for every number and chart. Daily = the latest run and the one before it;
-// the others are measured back from the latest date in the history.
-const WINDOWS = {
-  daily:  { label: "Daily",    phrase: "since the previous run",  text: "the latest run compared with the previous run" },
-  month:  { label: "Monthly",  phrase: "over the last 30 days",   text: "the last 30 days", days: 30 },
-  year:   { label: "Yearly",   phrase: "over the last 365 days",  text: "the last 365 days", days: 365 },
-  decade: { label: "Decade",   phrase: "over the last 10 years",  text: "the last 10 years", days: 3650 },
-  all:    { label: "All time", phrase: "since the first run",     text: "all of the history" },
-};
-
-function windowRows(rows, key) {
-  const all = dates(rows);
-  if (key === "all" || !all.length) return rows;
-  if (key === "daily") { const keep = new Set(all.slice(-2)); return rows.filter(r => keep.has(r.date)); }
-  const cutoff = dayNum(all[all.length - 1]) - WINDOWS[key].days;
-  return rows.filter(r => dayNum(r.date) >= cutoff);
-}
-
 // grouping for the chart: each point is one day, month, year or decade
 const GROUPS = {
   day: d => d, month: d => d.slice(0, 7), year: d => d.slice(0, 4), decade: d => d.slice(0, 3) + "0s",
@@ -60,7 +42,8 @@ function computeTrends(rows) {
     .sort((x, y) => y.ratio - x.ratio || x.item.localeCompare(y.item));
   const stock = latest.filter(r => r.num_for_sale !== null).sort((x, y) => x.num_for_sale - y.num_for_sale || x.item.localeCompare(y.item));
   const rated = latest.filter(r => r.rating !== null).sort((x, y) => y.rating - x.rating || y.rating_votes - x.rating_votes || x.item.localeCompare(y.item));
-  return { days, last, latest, sinceFirst, daily, priced, demand, stock, rated };
+  const gains = collectorGains(rows);
+  return { days, last, latest, sinceFirst, daily, priced, demand, stock, rated, gains };
 }
 
 function section(heading, paragraph, how, chartHtml) {
@@ -101,6 +84,19 @@ function renderFindings(t, win) {
       "for every record and every pair of consecutive days with a price, (price today − price before) ÷ price before × 100; the chart shows the ten largest by size." + inWindow,
       hbars(t.daily.slice(0, 10).map(d => ({ label: `${d.item} (${d.date.slice(5)})`, value: d.pct })), v => fmtPct(v))));
   } else out.push(needTwo("The biggest one-day move"));
+
+  // top seller of the window
+  if (t.gains.length) {
+    const top = t.gains[0];
+    const total = sum(t.gains.map(g => g.gain));
+    out.push(section(
+      top.gain > 0 ? `${esc(top.item)} was the top seller ${w.phrase}, with ${top.gain.toLocaleString("en-US")} new collectors` : `No record gained collectors ${w.phrase}`,
+      `Discogs does not publish sales, so "top seller" here means the record that gained the most collectors who say they have it. From ${top.fromDate} to ${top.toDate}, ` +
+      `${esc(top.item)} went from ${top.from.toLocaleString("en-US")} to ${top.to.toLocaleString("en-US")} collectors. All ${t.gains.length} records together gained ${total.toLocaleString("en-US")}, ` +
+      `an average of ${(total / t.gains.length).toFixed(1)} per record.`,
+      "for each record, have on the last day in the window minus have on the first day in the window with a count in history.csv; the chart shows the ten largest gains." + inWindow,
+      hbars(t.gains.slice(0, 10).map(g => ({ label: g.item, value: g.gain })), v => (v > 0 ? "+" : "") + v.toLocaleString("en-US"), "#6a4fb3")));
+  } else out.push(needTwo("The top seller"));
 
   // 3
   if (t.priced.length) {

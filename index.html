@@ -9,9 +9,9 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="assets/icon-192.png">
 <link rel="apple-touch-icon" href="assets/icon-192.png">
-<link rel="stylesheet" href="assets/style.css?v=2">
-<script src="assets/common.js?v=2" defer></script>
-<script src="assets/today.js?v=2" defer></script>
+<link rel="stylesheet" href="assets/style.css?v=3">
+<script src="assets/common.js?v=3" defer></script>
+<script src="assets/today.js?v=3" defer></script>
 </head>
 <body>
 <header class="hero"><div class="wrap">
@@ -36,6 +36,13 @@
   <h2>Biggest moves since the previous run</h2>
   <p class="note" id="move-note"></p>
   <ul class="list" id="moves"></ul>
+
+  <h2>Top seller by period</h2>
+  <p class="note">Discogs does not publish sales, so the top seller is the record that gained the most collectors who say they have it over the period. A period fills in as the history grows.</p>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Period</th><th>Top seller</th><th class="num">New collectors</th><th>Dates compared</th></tr></thead>
+    <tbody id="sellers"></tbody>
+  </table></div>
 
   <h2>Latest values</h2>
   <p class="note" id="latest-note"></p>
