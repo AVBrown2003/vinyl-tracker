@@ -43,7 +43,8 @@ document.addEventListener("DOMContentLoaded", async () => {
       const old = diff.before.get(r.item_id);
       const pct = old ? pctChange(old.lowest_price, r.lowest_price) : null;
       const cls = pct === null || Math.abs(pct) < 0.05 ? "flat" : pct > 0 ? "up" : "down";
-      return `<tr><td class="name"><div class="itemcell">${sleeve(r)}<a href="${esc(r.url)}" target="_blank" rel="noopener">${esc(r.item)}</a></div></td>` +
+      return `<tr><td class="name"><div class="itemcell">${sleeve(r)}<a href="${esc(r.url)}" target="_blank" rel="noopener">${esc(r.item)}</a>` +
+        `<button type="button" class="play" data-play="${esc(r.item_id)}" title="Play this album's most popular song" aria-label="Play a song from ${esc(r.item)}">&#9654;</button></div></td>` +
         `<td class="num">${fmtVal("lowest_price", r.lowest_price)}</td><td class="num ${cls}">${fmtPct(pct)}</td>` +
         `<td class="num">${fmtVal("num_for_sale", r.num_for_sale)}</td><td class="num">${fmtVal("have", r.have)}</td>` +
         `<td class="num">${fmtVal("want", r.want)}</td><td class="num">${fmtVal("rating", r.rating)}</td></tr>`;

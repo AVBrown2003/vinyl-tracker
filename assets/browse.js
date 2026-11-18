@@ -69,7 +69,8 @@ document.addEventListener("DOMContentLoaded", async () => {
       const starred = stars.has(r.item_id);
       return `<tr><td><button class="star" type="button" data-id="${esc(r.item_id)}" aria-pressed="${starred}" ` +
         `aria-label="${starred ? "Remove from" : "Add to"} shortlist" title="Shortlist">${starred ? "★" : "☆"}</button></td>` +
-        `<td class="name"><div class="itemcell">${sleeve(r)}<a href="${esc(r.url)}" target="_blank" rel="noopener">${esc(r.item)}</a></div>` +
+        `<td class="name"><div class="itemcell">${sleeve(r)}<a href="${esc(r.url)}" target="_blank" rel="noopener">${esc(r.item)}</a>` +
+        `<button type="button" class="play" data-play="${esc(r.item_id)}" title="Play this album's most popular song" aria-label="Play a song from ${esc(r.item)}">&#9654;</button></div>` +
         `<div class="sub">${esc(r.genre || "")}${r.country ? " · " + esc(r.country) + " pressing" : ""}</div></td>` +
         `<td class="num">${r.year ?? "-"}</td>` + ["lowest_price", "num_for_sale", "have", "want", "rating", "rating_votes"]
           .map(c => `<td class="num">${fmtVal(c, r[c])}</td>`).join("") + "</tr>";
