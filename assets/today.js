@@ -2,7 +2,7 @@
   try {
     const { status, rows } = await loadData();
     const el = id => document.getElementById(id);
-    el("run-time").textContent = status.run_time.replace("T", " ").replace("Z", " UTC");
+    el("run-time").textContent = new Date(Date.parse(status.run_time) - 6 * 3600000).toISOString().slice(0, 16).replace("T", " ") + " UTC-6";
     el("n-days").textContent = status.days_with_success;
     el("n-items").textContent = status.items;
     el("about-n").textContent = status.items;
